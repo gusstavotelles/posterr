@@ -3,7 +3,7 @@ version: "3.7"
 
 services:
   backend:
-    container_name: desafio-conta-digital_backend
+    container_name: posterr_backend
     restart: always
     build: 
       context: .
@@ -15,13 +15,13 @@ services:
     depends_on:
       - mysql
   mysql: 
-    container_name: desafio-conta-digital_mysql
+    container_name: posterr_mysql
     restart: always
     image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_PASSWORD=password
-      - MYSQL_DATABASE=desafio-conta-digital_docker
+      - MYSQL_DATABASE=posterr_docker
     ports:
     - "3306:3306"
     expose:
@@ -31,4 +31,4 @@ services:
 networks:
   default:
     external:
-      name: desafio-conta-digital
+      name: posterr
