@@ -1,0 +1,34 @@
+
+version: "3.7"
+
+services:
+  backend:
+    container_name: desafio-conta-digital_backend
+    restart: always
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "9001:9000"
+    volumes:
+      - ".:/main"
+    depends_on:
+      - mysql
+  mysql: 
+    container_name: desafio-conta-digital_mysql
+    restart: always
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=desafio-conta-digital_docker
+    ports:
+    - "3306:3306"
+    expose:
+      - "3306"
+  
+
+networks:
+  default:
+    external:
+      name: desafio-conta-digital
