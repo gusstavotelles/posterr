@@ -9,16 +9,12 @@ export interface IPost {
   id: string;
   user_id: string;
   date_published: string;
-  content: string;
-  quotes: string[];
-  reposts: number;
-  is_repost: boolean;
-  is_quote: boolean;
-  reposted_post_id?: string;
-  quoted_post_id?: boolean;
 }
 @Entity()
 export class Post implements IPost {
+  constructor(obj: IPost) {
+  }
+
   @ApiProperty()
   @PrimaryGeneratedColumn()
   public id: string;
@@ -27,38 +23,10 @@ export class Post implements IPost {
   @Column()
   public user_id: string;
 
-  // @ApiProperty()
-  // @Column()
-  // public date_published: string;
-
   @CreateDateColumn({ name: 'date_published' })
   date_published!: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ length: 777 })
   public content: string;
-
-  @ApiProperty()
-  @Column()
-  public quotes: string[];
-
-  @ApiProperty()
-  @Column()
-  public reposts: number;
-
-  @ApiProperty()
-  @Column()
-  public is_repost: boolean;
-
-  @ApiProperty()
-  @Column()
-  public is_quote: boolean;
-
-  @ApiProperty()
-  @Column()
-  public reposted_post_id?: string;
-
-  @ApiProperty()
-  @Column()
-  public quoted_post_id?: boolean;
 }

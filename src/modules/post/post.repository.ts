@@ -16,11 +16,17 @@ export class PostRepository {
     return result;
   }
 
+  // homepage
   async findAll(): Promise<Post[]> {
     return this.postRepository.find();
   }
 
-//   async findOne(document: string) {
-//     return this.postRepository.findOne({ where: { document: document } });
-//   }
+  // for profile
+  findByUser(user_id: string, posts_count: number): Promise<Post[]> {
+    return this.postRepository.find({
+      where: [{ user_id: user_id }],
+      skip: posts_count,
+      take: 5,
+    });
+  }
 }

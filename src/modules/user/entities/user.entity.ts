@@ -16,6 +16,10 @@ export interface IUser {
 }
 @Entity()
 export class User implements IUser {
+  constructor(obj: IUser) {
+  
+  }
+
   @ApiProperty()
   @PrimaryGeneratedColumn()
   public id: string;

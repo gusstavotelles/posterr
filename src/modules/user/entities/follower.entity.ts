@@ -9,8 +9,10 @@ export interface IFollower {
   followed_id: string;
 }
 @Entity()
-
 export class Follower implements IFollower {
+  constructor(obj: IFollower) {
+  }
+
   @ApiProperty()
   @PrimaryColumn()
   public follower_id: string;
