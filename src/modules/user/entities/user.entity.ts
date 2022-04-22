@@ -1,12 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 export interface IUser {
   id: string;
   name: string;
   username: string;
   date_joined: string;
-  followers: number;
-  following: number;
+  followers: string[];
+  following: string[];
   posts_count: number;
 }
 @Entity()
@@ -14,21 +19,28 @@ export class User implements IUser {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   public id: string;
+
   @ApiProperty()
   @Column()
   public name: string;
+
   @ApiProperty()
-  @Column()
+  @Column({ length: 14 })
   public username: string;
+
+  // @ApiProperty()
+  // @Column()
+  // public date_joined: string;
+
+  @CreateDateColumn({ name: 'date_joined' })
+  date_joined!: string;
+
   @ApiProperty()
-  @Column()
-  public date_joined: string;
+  public followers: string[];
+
   @ApiProperty()
-  @Column()
-  public followers: number;
-  @ApiProperty()
-  @Column()
-  public following: number;
+  public following: string[];
+
   @ApiProperty()
   @Column()
   public posts_count: number;

@@ -20,7 +20,7 @@ export class UserRepository {
     return this.userRepository.find();
   }
 
-//   async findOne(document: string) {
-//     return this.userRepository.findOne({ where: { document: document } });
-//   }
+  // async findOne(document: string) {
+  //   return this.userRepository.findOne({ where: { document: document } });
+  // }
 }

@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
@@ -8,18 +10,11 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @ApiTags('Create New User')
+  @ApiOkResponse({ description: 'User done' })
+  async create(@Body() createUserDto: CreateUserDto) {
+    const newUser = await this.userService.create(createUserDto);
+    return newUser;
   }
 
   @Patch(':id')
@@ -27,8 +22,17 @@ export class UserController {
     return this.userService.update(+id, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
-  }
+  // @Get(':document')
+  // @ApiTags('Find Users By Account')
+  // @ApiOkResponse({
+  //   description: 'Get Users by Account Successful',
+  //   type: User,
+  //   isArray: true,
+  // })
+  // async findByAccount(
+  //   @Param('document') document: string,
+  // ): Promise<User[]> {
+  //   const user = await this.userService.findByAccount(document);
+  //   return user;
+  // }
 }

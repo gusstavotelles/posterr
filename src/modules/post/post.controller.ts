@@ -1,16 +1,39 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+} from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postService.create(createPostDto);
+  @ApiTags('Create New Post')
+  @ApiOkResponse({ description: 'Post Created' })
+  async create(@Body() createPostDto: CreatePostDto) {
+    const newPost = await this.postService.create(createPostDto);
+    return newPost;
   }
+
+  // @Get(':document')
+  // @ApiTags('Find Posts By Account')
+  // @ApiOkResponse({
+  //   description: 'Get Posts by Account Successful',
+  //   type: Post,
+  //   isArray: true,
+  // })
+  // async findByAccount(
+  //   @Param('document') document: string,
+  // ): Promise<Post[]> {
+  //   const post = await this.postService.findByAccount(document);
+  //   return post;
+  // }
 
   @Get()
   findAll() {
@@ -20,15 +43,5 @@ export class PostController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.postService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
   }
 }
