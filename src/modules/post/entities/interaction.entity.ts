@@ -12,15 +12,12 @@ export class Interaction implements IInteraction {
   constructor(obj: IInteraction) {
   }
 
-  @ApiProperty()
   @PrimaryColumn()
   public original_post_id: string;
 
-  @ApiProperty()
   @PrimaryColumn()
   public interaction_post_id: string;
 
-  @ApiProperty()
   @Column()
   public interaction_type: InteractionType;
 }

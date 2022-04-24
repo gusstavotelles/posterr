@@ -1,23 +1,64 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { UserRepository } from '../user/user.repository';
+import { UserService } from '../user/user.service';
 import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import { Interaction } from './entities/interaction.entity';
+import { InteractionRepository } from './interaction.repository';
+import { PostRepository } from './post.repository';
 
 @Injectable()
 export class PostService {
-  create(createPostDto: CreatePostDto) {
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly postRepository: PostRepository,
+    private readonly interactionRepository: InteractionRepository,
+    private readonly userService: UserService,
+  ) {}
+
+  async create(newPost: CreatePostDto) {
+    if (this.maxPostsReached(newPost.user_id)) {
+      throw new HttpException(
+        "Today's max posts number reached",
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (newPost.content.length > 777) {
+      throw new HttpException(
+        'Maximum number of posts exceeded',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    try {
+      const result = await this.postRepository.insert(newPost);
+      if (newPost.interaction_type) {
+        const newInteraction: Interaction = {
+          original_post_id: newPost.original_post_id,
+          interaction_post_id: result.id,
+          interaction_type: newPost.interaction_type,
+        };
+        await this.interactionRepository.insert(newInteraction);
+      }
+    } catch (error) {}
+
     return 'This action adds a new post';
   }
 
-  findAll() {
+  loadHomePage() {
     return `This action returns all post`;
   }
 
   findOne(id: number) {
     return `This action returns a #${id} post`;
   }
+  private async maxPostsReached(user_id: string): Promise<boolean> {
+    const posts = await this.postRepository.findByUserToday(user_id);
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+    if (posts.length >= 5) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   remove(id: number) {
