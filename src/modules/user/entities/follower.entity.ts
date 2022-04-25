@@ -13,11 +13,9 @@ export class Follower implements IFollower {
   constructor(obj: IFollower) {
   }
 
-  @ApiProperty()
   @PrimaryColumn()
   public follower_id: string;
 
-  @ApiProperty()
   @PrimaryColumn()
   public followed_id: string;
 }

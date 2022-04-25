@@ -35,10 +35,10 @@ export class PostController {
   //   return post;
   // }
 
-  @Get()
-  findAll() {
-    return this.postService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.postService.findAll();
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

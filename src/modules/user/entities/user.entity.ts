@@ -12,12 +12,13 @@ export interface IUser {
   date_joined: string;
   followers: string[];
   following: string[];
-  posts_count: number;
 }
 @Entity()
 export class User implements IUser {
   constructor(obj: IUser) {
-  
+    Object.entries(obj).forEach(([key, value]) =>
+      Object.assign(this, { [key]: value }),
+    );
   }
 
   @ApiProperty()
@@ -44,8 +45,4 @@ export class User implements IUser {
 
   @ApiProperty()
   public following: string[];
-
-  @ApiProperty()
-  @Column()
-  public posts_count: number;
 }

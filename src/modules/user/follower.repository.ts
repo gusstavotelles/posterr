@@ -15,11 +15,23 @@ export class FollowerRepository {
     return result;
   }
 
+  async unfollow(followObj: Follower) {
+    const result = await this.followerRepository.delete({
+      follower_id: followObj.follower_id,
+      followed_id: followObj.followed_id,
+    });
+    return result;
+  }
+
   async findAll(): Promise<Follower[]> {
     return this.followerRepository.find();
   }
 
-  // async findOne(document: string) {
-  //   return this.followerRepository.findOne({ where: { document: document } });
-  // }
+  async getFollowers(id: string): Promise<Follower[]> {
+    return this.followerRepository.find({ where: { followed_id: id } });
+  }
+
+  async getFollowing(id: string): Promise<Follower[]> {
+    return this.followerRepository.find({ where: { follower_id: id } });
+  }
 }

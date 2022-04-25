@@ -12,7 +12,7 @@ export class PostRepository {
     private postRepository: Repository<Post>,
   ) {}
 
-  async insert(newPost: CreatePostDto): Promise<CreatePostDto & Post> {
+  async insert(newPost: CreatePostDto): Promise<Post> {
     const result = await this.postRepository.save(newPost);
     return result;
   }

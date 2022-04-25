@@ -1,6 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UserRepository } from '../user/user.repository';
-import { UserService } from '../user/user.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Interaction } from './entities/interaction.entity';
 import { InteractionRepository } from './interaction.repository';
@@ -9,10 +7,8 @@ import { PostRepository } from './post.repository';
 @Injectable()
 export class PostService {
   constructor(
-    private readonly userRepository: UserRepository,
     private readonly postRepository: PostRepository,
     private readonly interactionRepository: InteractionRepository,
-    private readonly userService: UserService,
   ) {}
 
   async create(newPost: CreatePostDto) {
