@@ -5,11 +5,15 @@ import { UserRepository } from './user.repository';
 import { User } from './entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FollowerRepository } from './follower.repository';
+import { Follower } from './entities/follower.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([Follower]),
+  ],
   controllers: [UserController],
-  providers: [UserService, UserRepository, FollowerRepository],
-  exports: [UserService, UserRepository, FollowerRepository],
+  providers: [FollowerRepository, UserService, UserRepository],
+  exports: [FollowerRepository, UserService, UserRepository],
 })
 export class UserModule {}

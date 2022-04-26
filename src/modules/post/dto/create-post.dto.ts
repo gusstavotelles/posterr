@@ -1,10 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { InteractionType } from '../entities/interaction.entity';
 export interface ICreatePostDto {
   user_id: string;
   content: string;
   original_post_id?: string;
-  interaction_type?: InteractionType;
+  post_type?: 'POST' | 'REPOST' | 'QUOTE';
 }
 
 export class CreatePostDto implements ICreatePostDto {
@@ -16,7 +15,7 @@ export class CreatePostDto implements ICreatePostDto {
 
   @ApiProperty()
   public original_post_id?: string;
-  
+
   @ApiProperty()
-  public interaction_type?: InteractionType;
+  public post_type?: 'POST' | 'REPOST' | 'QUOTE';
 }

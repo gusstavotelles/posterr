@@ -15,4 +15,10 @@ export class InteractionRepository {
     const result = await this.interactionRepository.save(newInteraction);
     return result;
   }
+
+  async getByOriginalPost(id: string) {
+    return this.interactionRepository.find({
+      where: [{ original_post_id: id }],
+    });
+  }
 }

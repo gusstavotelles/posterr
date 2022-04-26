@@ -8,15 +8,15 @@ import { User } from './entities/user.entity';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  @ApiTags('Follow User')
-  @ApiOkResponse({ description: 'You are now Following this user' })
-  async generateUsers() {
+  @Post('generate')
+  @ApiTags('Generate Users')
+  @ApiOkResponse({ description: 'Users Generated', type: User, isArray: false })
+  async generateUsers(): Promise<User[]> {
     const response = await this.userService.generateUsers();
     return response;
   }
 
-  @Post()
+  @Post('follow')
   @ApiTags('Follow User')
   @ApiOkResponse({ description: 'You are now Following this user' })
   async follow(@Body() followUserDto: FollowUserDto) {
@@ -24,7 +24,7 @@ export class UserController {
     return response;
   }
 
-  @Post()
+  @Post('unfollow')
   @ApiTags('Unfollow User')
   @ApiOkResponse({ description: 'User unfollowed' })
   async unfollow(@Body() followUserDto: FollowUserDto) {
@@ -32,6 +32,8 @@ export class UserController {
     return response;
   }
 
+  @Get('loadProfile')
+  @ApiTags('Load Profile')
   async loadProfile(@Param('id') id: string): Promise<User> {
     const user = await this.userService.loadProfile(id);
     return user;

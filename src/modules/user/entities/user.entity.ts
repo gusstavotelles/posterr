@@ -15,11 +15,7 @@ export interface IUser {
 }
 @Entity()
 export class User implements IUser {
-  constructor(obj: IUser) {
-    Object.entries(obj).forEach(([key, value]) =>
-      Object.assign(this, { [key]: value }),
-    );
-  }
+ 
 
   @ApiProperty()
   @PrimaryGeneratedColumn()

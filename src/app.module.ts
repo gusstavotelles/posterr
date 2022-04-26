@@ -6,6 +6,8 @@ import { PostModule } from './modules/post/post.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './modules/user/entities/user.entity';
 import { Post } from './modules/post/entities/post.entity';
+import { Follower } from './modules/user/entities/follower.entity';
+import { Interaction } from './modules/post/entities/interaction.entity';
 
 @Module({
   imports: [
@@ -18,9 +20,11 @@ import { Post } from './modules/post/entities/post.entity';
       username: 'root',
       password: 'password',
       database: 'posterr_docker',
-      entities: [Post, User],
+      entities: [Post, User, Follower, Interaction],
       synchronize: true,
       dropSchema: true,
+      migrationsTableName: 'posterr_migrations',
+      migrations: ['migration/*.js'],
     }),
   ],
   exports: [UserModule, PostModule],

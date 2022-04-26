@@ -53,12 +53,13 @@ export class UserRepository {
       following: [],
     },
   ];
-
+  
   async generateUsers(): Promise<User[]> {
     let result: User[] = [];
-    this.usersMock.forEach(async (user) => {
-      result.push(await this.userRepository.save(user));
-    });
+    for await (const user of this.usersMock) {
+      const savedUser = await this.userRepository.save(user);
+      result.push(savedUser);
+    }
     return result;
   }
 
@@ -66,7 +67,7 @@ export class UserRepository {
     return this.userRepository.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<User> {
     return this.userRepository.findOne({ where: { id: id } });
   }
 }

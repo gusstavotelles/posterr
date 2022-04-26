@@ -12,14 +12,92 @@ export class PostRepository {
     private postRepository: Repository<Post>,
   ) {}
 
+  private postsMock: CreatePostDto[] = [
+    {
+      user_id: '1',
+      content: 'This is a post',
+      original_post_id: null,
+      post_type: 'POST',
+    },
+    {
+      user_id: '2',
+      content: 'I can see your post',
+      original_post_id: '1',
+      post_type: 'QUOTE',
+    },
+    {
+      user_id: '3',
+      content: 'this is a cool post!! ',
+      original_post_id: '1',
+      post_type: 'REPOST',
+    },
+    {
+      user_id: '2',
+      content: 'And another one.....',
+      original_post_id: null,
+      post_type: 'POST',
+    },
+    {
+      user_id: '3',
+      content: 'Keep going guys!',
+      original_post_id: null,
+      post_type: 'POST',
+    },
+    {
+      user_id: '1',
+      content: 'Almost there',
+      original_post_id: null,
+      post_type: 'POST',
+    },
+    {
+      user_id: '2',
+      content: 'A few more to go',
+      original_post_id: null,
+      post_type: 'POST',
+    },
+    {
+      user_id: '1',
+      content: 'Getting there',
+      original_post_id: '4',
+      post_type: 'REPOST',
+    },
+    {
+      user_id: '3',
+      content: '',
+      original_post_id: '5',
+      post_type: 'REPOST',
+    },
+    {
+      user_id: '1',
+      content: "And we're done",
+      original_post_id: '7',
+      post_type: 'QUOTE',
+    },
+  ];
+
+  async generatePosts(): Promise<Post[]> {
+    let result: Post[] = [];
+    for await (const post of this.postsMock) {
+      const savedPost = await this.postRepository.save(post);
+      result.push(savedPost);
+    }
+    return result;
+  }
+
   async insert(newPost: CreatePostDto): Promise<Post> {
     const result = await this.postRepository.save(newPost);
     return result;
   }
 
   // homepage
-  async findAll(posts_count: number): Promise<Post[]> {
-    return this.postRepository.find({ skip: posts_count, take: 10 });
+  async loadHomePage(posts_count: number): Promise<Post[]> {
+    return this.postRepository.find({ take: 10 });
+  }
+
+  findOne(id: string): Promise<Post> {
+    return this.postRepository.findOneBy({
+      id: id,
+    });
   }
 
   // for profile
