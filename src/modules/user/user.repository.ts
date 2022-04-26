@@ -53,7 +53,7 @@ export class UserRepository {
       following: [],
     },
   ];
-  
+
   async generateUsers(): Promise<User[]> {
     let result: User[] = [];
     for await (const user of this.usersMock) {

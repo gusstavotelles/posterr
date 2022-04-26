@@ -13,12 +13,7 @@ import { InteractionRepository } from '../post/interaction.repository';
 import { Interaction } from '../post/entities/interaction.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Post]),
-    TypeOrmModule.forFeature([Interaction]),
-    TypeOrmModule.forFeature([User]),
-    TypeOrmModule.forFeature([Follower]),
-  ],
+  imports: [TypeOrmModule.forFeature([Post, Interaction, User, Follower])],
   controllers: [UserController],
   providers: [
     PostService,

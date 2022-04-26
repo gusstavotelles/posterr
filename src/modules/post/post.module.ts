@@ -10,11 +10,7 @@ import { InteractionRepository } from './interaction.repository';
 import { PostRepository } from './post.repository';
 
 @Module({
-  imports: [
-    UserModule,
-    TypeOrmModule.forFeature([Post]),
-    TypeOrmModule.forFeature([Interaction]),
-  ],
+  imports: [UserModule, TypeOrmModule.forFeature([Post, Interaction])],
   controllers: [PostController],
   providers: [InteractionRepository, PostService, PostRepository],
   exports: [InteractionRepository, PostService, PostRepository],

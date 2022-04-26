@@ -91,7 +91,7 @@ export class PostService {
     }
   }
 
-  async create(newPost: CreatePostDto) {
+  async create(newPost: CreatePostDto): Promise<GetPostDto> {
     if (await this.maxPostsReached(newPost.user_id)) {
       throw new HttpException(
         "Today's max posts number reached",

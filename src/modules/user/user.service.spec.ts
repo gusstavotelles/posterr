@@ -20,8 +20,7 @@ describe('UserService', () => {
 
   it('user try to follow himself, should fail', async () => {
     const follow: FollowUserDto = { followed_id: '1', follower_id: '1' };
-    const followResult = await service.follow(follow);
-    expect(followResult).toEqual(null);
+    expect(service.follow(follow)).rejects.toThrowError();
   });
 
   it('should return correct followed id', async () => {
@@ -29,7 +28,6 @@ describe('UserService', () => {
     const followResult = await service.follow(follow);
     expect(followResult.followed_id).toEqual(follow.followed_id);
   });
-
   test('should return correct follower id', async () => {
     const follow: FollowUserDto = { followed_id: '2', follower_id: '1' };
     const followResult = await service.follow(follow);

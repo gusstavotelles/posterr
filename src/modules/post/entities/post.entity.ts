@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   CreateDateColumn,
@@ -37,10 +36,8 @@ export class Post implements IPost {
   public post_type: 'POST' | 'REPOST' | 'QUOTE';
 }
 
-
 export enum PostType {
   POST = 'POST',
   REPOST = 'REPOST',
   QUOTE = 'QUOTE',
 }
-

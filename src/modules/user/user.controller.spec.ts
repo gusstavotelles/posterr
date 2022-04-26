@@ -20,30 +20,33 @@ describe('UserController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
-
-  it('should return an error if follower_id is undefined', () => {
+  it('should return 1 line affected on unfollow', async () => {
     const userFollowObject = new FollowUserDto();
-    userFollowObject.followed_id = '1234';
+    userFollowObject.follower_id = '1';
+    userFollowObject.followed_id = '5';
 
-    const response = controller.follow(userFollowObject);
-    expect(response).toBeUndefined();
+    const response = await controller.unfollow(userFollowObject);
+
+    expect(response.affected).toEqual(1);
   });
 
-  it('should return an error if followed_id is undefined', () => {
+  it('should return the correct followed_id', async () => {
     const userFollowObject = new FollowUserDto();
-    userFollowObject.follower_id = '1234';
+    userFollowObject.follower_id = '1';
+    userFollowObject.followed_id = '5';
 
-    const response = controller.follow(userFollowObject);
-    expect(response).toBeUndefined();
+    const response = await controller.follow(userFollowObject);
+
+    expect(response.followed_id).toEqual('5');
   });
 
-  it('should return a response of "You are now following this user"', () => {
+  it('should return the correct follower_id', async () => {
     const userFollowObject = new FollowUserDto();
-    userFollowObject.follower_id = '1234';
-    userFollowObject.followed_id = '5678';
+    userFollowObject.follower_id = '3';
+    userFollowObject.followed_id = '4';
 
-    const response = controller.follow(userFollowObject);
+    const response = await controller.follow(userFollowObject);
 
-    expect(response).toEqual('You are now following this user');
+    expect(response.follower_id).toEqual('3');
   });
 });

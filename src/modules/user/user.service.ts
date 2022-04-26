@@ -17,11 +17,18 @@ export class UserService {
   ) {}
 
   async generateUsers(): Promise<User[]> {
-    return await this.userRepository.generateUsers();
+    try {
+      return await this.userRepository.generateUsers();
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async follow(follow: FollowUserDto): Promise<Follower> {
     try {
+      if (!follow.followed_id || !follow.follower_id) {
+        throw new HttpException('invalid user_id', HttpStatus.BAD_REQUEST);
+      }
       if (follow.followed_id === follow.follower_id)
         throw new HttpException(
           "you can't follow yourself",
@@ -74,7 +81,7 @@ export class UserService {
         id: user.id,
         name: user.name,
         username: user.username,
-        date_joined: user.date_joined,
+        date_joined: this.convertDate(user.date_joined),
         followers: followers,
         following: following,
         posts: posts,
@@ -82,6 +89,15 @@ export class UserService {
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  private convertDate(date: string) {
+    const newDate = new Date(date);
+    return newDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
   }
 
   private async userExists(user_id: string): Promise<boolean> {

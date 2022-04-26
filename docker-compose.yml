@@ -1,8 +1,7 @@
-
-version: "3.7"
+version: '3.7'
 
 services:
-  mysql: 
+  mysql:
     container_name: posterr_mysql
     restart: always
     image: mysql:5.7
@@ -11,12 +10,6 @@ services:
       - MYSQL_PASSWORD=password
       - MYSQL_DATABASE=posterr_docker
     ports:
-    - "3306:3306"
+      - '3306:3306'
     expose:
-      - "3306"
-  
-
-networks:
-  default:
-    external:
-      name: posterr
+      - '3306'

@@ -5,7 +5,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { GetPostDto } from './dto/get-post.dto';
 import { Post as PostEntity } from './entities/post.entity';
 
-// 
+//
 // {
 //   "user_id": "1",
 //   "content": "TESTE DO GUSTAVO LUIZ CAMPOLINA",
@@ -23,7 +23,9 @@ export class PostController {
     type: GetPostDto,
     isArray: true,
   })
-  async loadHomePage(@Query('postsLoaded') postsLoaded: number) {
+  async loadHomePage(
+    @Query('postsLoaded') postsLoaded: number,
+  ): Promise<GetPostDto[]> {
     const posts = await this.postService.loadHomePage(postsLoaded);
     return posts;
   }
@@ -43,7 +45,7 @@ export class PostController {
   @Post('createPost')
   @ApiTags('Create New Post')
   @ApiOkResponse({ description: 'Post Created' })
-  async create(@Body() createPostDto: CreatePostDto) {
+  async create(@Body() createPostDto: CreatePostDto): Promise<GetPostDto> {
     const newPost = await this.postService.create(createPostDto);
     return newPost;
   }

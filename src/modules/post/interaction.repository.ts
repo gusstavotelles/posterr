@@ -16,7 +16,7 @@ export class InteractionRepository {
     return result;
   }
 
-  async getByOriginalPost(id: string) {
+  async getByOriginalPost(id: string): Promise<Interaction[]> {
     return this.interactionRepository.find({
       where: [{ original_post_id: id }],
     });

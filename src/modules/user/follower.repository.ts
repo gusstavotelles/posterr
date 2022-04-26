@@ -10,15 +10,15 @@ export class FollowerRepository {
     private followerRepository: Repository<Follower>,
   ) {}
 
-  async follow(followObj: Follower) {
-    const result = await this.followerRepository.save(followObj);
+  async follow(follow_obj: Follower) {
+    const result = await this.followerRepository.save(follow_obj);
     return result;
   }
 
-  async unfollow(followObj: Follower) {
+  async unfollow(follow_obj: Follower) {
     const result = await this.followerRepository.delete({
-      follower_id: followObj.follower_id,
-      followed_id: followObj.followed_id,
+      follower_id: follow_obj.follower_id,
+      followed_id: follow_obj.followed_id,
     });
     return result;
   }

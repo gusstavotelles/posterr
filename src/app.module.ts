@@ -1,13 +1,13 @@
-import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { Interaction } from './modules/post/entities/interaction.entity';
-import { Post } from './modules/post/entities/post.entity';
-import { PostModule } from './modules/post/post.module';
-import { Follower } from './modules/user/entities/follower.entity';
+import { Module } from '@nestjs/common';
 import { User } from './modules/user/entities/user.entity';
 import { UserModule } from './modules/user/user.module';
+import { Interaction } from './modules/post/entities/interaction.entity';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { Post } from './modules/post/entities/post.entity';
+import { Follower } from './modules/user/entities/follower.entity';
+import { PostModule } from './modules/post/post.module';
 
 @Module({
   imports: [
@@ -22,10 +22,10 @@ import { UserModule } from './modules/user/user.module';
       database: 'posterr_docker',
       entities: [Post, User, Follower, Interaction],
       synchronize: true,
-      logging: false,
-      keepConnectionAlive: true,
       migrationsTableName: 'posterr_migrations',
       migrations: ['migration/*.js'],
+      logging: false,
+      keepConnectionAlive: true,
     }),
     TypeOrmModule.forFeature([Post, User, Follower, Interaction]),
   ],
