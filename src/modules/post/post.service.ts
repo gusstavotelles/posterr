@@ -100,7 +100,7 @@ export class PostService {
     }
     if (newPost.content.length > 777) {
       throw new HttpException(
-        'Maximum number of posts exceeded',
+        'Maximum number of characters exceeded',
         HttpStatus.BAD_REQUEST,
       );
     }

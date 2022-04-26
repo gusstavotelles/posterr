@@ -1,7 +1,6 @@
 import { FollowUserDto } from './dto/follow-user.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserRepository } from '../user/user.repository';
-import { PostRepository } from '../post/post.repository';
 import { FollowerRepository } from './follower.repository';
 import { User } from './entities/user.entity';
 import { Follower } from './entities/follower.entity';
@@ -23,8 +22,20 @@ export class UserService {
 
   async follow(follow: FollowUserDto): Promise<Follower> {
     try {
-      const followResult = await this.followerRepository.follow(follow);
-      return followResult;
+      if (follow.followed_id === follow.follower_id)
+        throw new HttpException(
+          "you can't follow yourself",
+          HttpStatus.BAD_REQUEST,
+        );
+      if (
+        (await this.userExists(follow.followed_id)) &&
+        (await this.userExists(follow.follower_id))
+      ) {
+        const followResult = await this.followerRepository.follow(follow);
+        return followResult;
+      } else {
+        throw new HttpException('user not found', HttpStatus.BAD_REQUEST);
+      }
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
@@ -32,8 +43,20 @@ export class UserService {
 
   async unfollow(follow: FollowUserDto) {
     try {
-      const followResult = await this.followerRepository.unfollow(follow);
-      return followResult;
+      if (follow.followed_id === follow.follower_id)
+        throw new HttpException(
+          "you can't unfollow yourself",
+          HttpStatus.BAD_REQUEST,
+        );
+      if (
+        (await this.userExists(follow.followed_id)) &&
+        (await this.userExists(follow.follower_id))
+      ) {
+        const followResult = await this.followerRepository.unfollow(follow);
+        return followResult;
+      } else {
+        throw new HttpException('user not found', HttpStatus.BAD_REQUEST);
+      }
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
@@ -42,28 +65,10 @@ export class UserService {
   async loadProfile(id: string, posts_count: number): Promise<GetUserDto> {
     try {
       let user = await this.userRepository.findOne(id);
-      // let followers: string[] = [];
-      // let following: string[] = [];
       let posts: GetPostDto[] = [];
 
       let followers = await this.followerRepository.getFollowers(id);
       let following = await this.followerRepository.getFollowing(id);
-
-      // user.followers = (await this.followerRepository.getFollowers(id)).map(
-      //   (follow) => follow.follower_id,
-      // );
-      // for await (const follower_id of user.followers) {
-      //   const result = await this.userRepository.findOne(follower_id);
-      //   followers.push(result);
-      // }
-
-      // user.following = (await this.followerRepository.getFollowing(id)).map(
-      //   (follow) => follow.followed_id,
-      // );
-      // for await (const follower_id of user.following) {
-      //   const result = await this.userRepository.findOne(follower_id);
-      //   following.push(result);
-      // }
       posts = await this.postService.findByUser(user.id, posts_count);
       return {
         id: user.id,
@@ -77,5 +82,10 @@ export class UserService {
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  private async userExists(user_id: string): Promise<boolean> {
+    const response = await this.userRepository.findOne(user_id);
+    return response ? true : false;
   }
 }

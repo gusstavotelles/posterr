@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Post } from './entities/post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import * as moment from 'moment';
 
 @Injectable()
@@ -111,7 +111,10 @@ export class PostRepository {
 
   findByUserToday(user_id: string): Promise<Post[]> {
     return this.postRepository.find({
-      where: [{ user_id: user_id, date_published: moment().format() }],
+      where: {
+        user_id,
+        date_published: Like(`${new Date().toISOString().slice(0, 10)}%`),
+      },
     });
   }
 }

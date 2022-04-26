@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './modules/user/user.module';
-import { PostModule } from './modules/post/post.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './modules/user/entities/user.entity';
-import { Post } from './modules/post/entities/post.entity';
-import { Follower } from './modules/user/entities/follower.entity';
 import { Interaction } from './modules/post/entities/interaction.entity';
+import { Post } from './modules/post/entities/post.entity';
+import { PostModule } from './modules/post/post.module';
+import { Follower } from './modules/user/entities/follower.entity';
+import { User } from './modules/user/entities/user.entity';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -22,10 +22,12 @@ import { Interaction } from './modules/post/entities/interaction.entity';
       database: 'posterr_docker',
       entities: [Post, User, Follower, Interaction],
       synchronize: true,
-      dropSchema: true,
+      logging: false,
+      keepConnectionAlive: true,
       migrationsTableName: 'posterr_migrations',
       migrations: ['migration/*.js'],
     }),
+    TypeOrmModule.forFeature([Post, User, Follower, Interaction]),
   ],
   exports: [UserModule, PostModule],
   controllers: [AppController],

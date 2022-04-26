@@ -1,73 +1,51 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /><a>
-</p>
+# Postrr (Backend) - Gustavo Luiz Campolina Telles
+## Coding
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+* For the realization of the challenge, the stack chosen was NestJS, because it is a modern framework, easy to set up, easy to establish and execute, also because of the familiarity with TypeScript
 
-## Description
+* The structures were created using the automated command 'nest generate resource' (shown below), already creating each module separately with its Controller, Service and .spec files for executed unit tests. '.repository' files have been added
+  for each module.
+``` 
+ $ nest generate resource account
+```
+* Each entity is a separate module, which in turn is composed of a controller, a service and a repository
+* the database chosen is MySQL which is maintained through docker compose during project execution.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+## How to Run
+After having the repository cloned or opened via .RAR file, being in the root directory of the project, run it in the terminal:
+``` 
+ $ npm i
 ```
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+``` 
+ $ docker-compose down && docker-compose up --build
+```
+``` 
+ $ npm run start:dev
 ```
 
-## Test
+after the build, access http://localhost:3001/api/#/ where you will have access to Swagger.
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+Tendo Acessado o Swagger, basta testar cada método com as entradas corretas, seguindo o formato do exemplo:
+do exemplo
+1) Account
+``` 
+{"name": "Gustavo Telles", "document": "111.222.333-44", "available_value": 10000}
+{"name": "Alicia Ligeiro", "document": "999.999.999-99", "available_value": 2000}
 ```
 
-## Support
+2) Transaction
+``` 
+{"sender_document": "111.222.333-44", "receiver_document": "999.999.999-99", "value": 300}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Fontes de pesquisa para desenvolvimento do projeto
+* https://docs.nestjs.com/openapi/introduction
+* https://medium.com/the-crowdlinker-chronicle/using-docker-with-nestjs-or-any-nodejs-app-e905b83275e
+* https://github.com/CrowdLinker/nestbox/blob/master/examples/custom-entrypoint/docker-compose.yml
+* https://progressivecoder.com/how-to-configure-nestjs-typeorm-integration-mysql/
+* https://stackoverflow.com/questions/49504765/debugging-nest-js-application-with-vscode
+* https://docs.nestjs.com/fundamentals/testing#unit-testing
+* https://docs.nestjs.com/techniques/database
+* https://progressivecoder.com/how-to-configure-nestjs-typeorm-integration-mysql/
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-  Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
