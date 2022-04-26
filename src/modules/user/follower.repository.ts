@@ -27,11 +27,15 @@ export class FollowerRepository {
     return this.followerRepository.find();
   }
 
-  async getFollowers(id: string): Promise<Follower[]> {
-    return this.followerRepository.find({ where: { followed_id: id } });
+  async getFollowers(id: string): Promise<string[]> {
+    return (
+      await this.followerRepository.find({ where: { followed_id: id } })
+    ).map((follower) => follower.follower_id);
   }
 
-  async getFollowing(id: string): Promise<Follower[]> {
-    return this.followerRepository.find({ where: { follower_id: id } });
+  async getFollowing(id: string): Promise<string[]> {
+    return (
+      await this.followerRepository.find({ where: { follower_id: id } })
+    ).map((follower) => follower.followed_id);
   }
 }

@@ -85,16 +85,14 @@ export class PostService {
         const result = await this.create(post);
         response.push(result);
       }
-
-      let posts = await this.postRepository.generatePosts();
-      return posts;
+      return response;
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
   async create(newPost: CreatePostDto) {
-    if (this.maxPostsReached(newPost.user_id)) {
+    if (await this.maxPostsReached(newPost.user_id)) {
       throw new HttpException(
         "Today's max posts number reached",
         HttpStatus.BAD_REQUEST,
@@ -109,31 +107,32 @@ export class PostService {
 
     try {
       const result = await this.postRepository.insert(newPost);
-      if (newPost.post_type !== 'POST' ) {
+      if (newPost.post_type !== 'POST') {
         const newInteraction: Interaction = {
           original_post_id: newPost.original_post_id,
-          interaction_post_id: result.id,
+          interaction_post_id: result.id.toString(),
         };
         await this.interactionRepository.insert(newInteraction);
       }
-    } catch (error) {}
-
-    return 'This action adds a new post';
+      return await this.findOne(result.id);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async loadHomePage(postsLoaded: number): Promise<GetPostDto[]> {
     let posts;
-    let response: GetPostDto[];
+    let response: GetPostDto[] = [];
     try {
       posts = await this.postRepository.loadHomePage(postsLoaded);
+      for await (const post of posts) {
+        const result = await this.findOne(post.id);
+        response.push(result);
+      }
+      return response;
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
-    for await (const post of posts) {
-      const result = await this.findOne(post.id);
-      response.push(result);
-    }
-    return response;
   }
 
   async findOne(id: string): Promise<GetPostDto> {
@@ -146,11 +145,28 @@ export class PostService {
         content: post.content,
         username: (await this.userRepository.findOne(post.user_id)).username,
         date_published: post.date_published,
-        original_post: await this.postRepository.findOne(post.original_post_id),
+        original_post: post.original_post_id
+          ? await this.postRepository.findOne(post.original_post_id)
+          : null,
         post_type: post.post_type,
         quotes: interactions.quotes,
         reposts: interactions.reposts,
       };
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findByUser(id: string, posts_count: number): Promise<GetPostDto[]> {
+    let posts;
+    let response: GetPostDto[] = [];
+    try {
+      posts = await this.postRepository.findByUser(id, posts_count);
+      for await (const post of posts) {
+        const result = await this.findOne(post.id);
+        response.push(result);
+      }
+      return response;
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
@@ -182,9 +198,9 @@ export class PostService {
     const posts = await this.postRepository.findByUserToday(user_id);
 
     if (posts.length >= 5) {
-      return false;
-    } else {
       return true;
+    } else {
+      return false;
     }
   }
 }

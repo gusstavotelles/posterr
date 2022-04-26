@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { FollowUserDto } from './dto/follow-user.dto';
 import { User } from './entities/user.entity';
+import { GetUserDto } from './dto/get-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -32,10 +33,13 @@ export class UserController {
     return response;
   }
 
-  @Get('loadProfile')
+  @Get('loadProfile/:id/:posts_count')
   @ApiTags('Load Profile')
-  async loadProfile(@Param('id') id: string): Promise<User> {
-    const user = await this.userService.loadProfile(id);
+  async loadProfile(
+    @Param('id') id: string,
+    @Param('posts_count') posts_count: number,
+  ): Promise<GetUserDto> {
+    const user = await this.userService.loadProfile(id, posts_count);
     return user;
   }
 }

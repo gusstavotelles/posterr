@@ -91,7 +91,7 @@ export class PostRepository {
 
   // homepage
   async loadHomePage(posts_count: number): Promise<Post[]> {
-    return this.postRepository.find({ take: 10 });
+    return this.postRepository.find({ skip: posts_count,take: 10 });
   }
 
   findOne(id: string): Promise<Post> {

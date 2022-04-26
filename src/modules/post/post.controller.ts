@@ -1,22 +1,29 @@
-import { Controller, Get, Post, Body, Param, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Req, Query } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { GetPostDto } from './dto/get-post.dto';
 import { Post as PostEntity } from './entities/post.entity';
 
+// 
+// {
+//   "user_id": "1",
+//   "content": "TESTE DO GUSTAVO LUIZ CAMPOLINA",
+//   "original_post_id": null,
+//   "post_type": "POST"
+// }
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @Get('loadHomepage')
+  @Get('loadHomePage')
   @ApiTags('HomePage')
   @ApiOkResponse({
     description: 'Homepage loaded successfully',
     type: GetPostDto,
     isArray: true,
   })
-  async findAll(@Req() postsLoaded: number) {
+  async loadHomePage(@Query('postsLoaded') postsLoaded: number) {
     const posts = await this.postService.loadHomePage(postsLoaded);
     return posts;
   }
